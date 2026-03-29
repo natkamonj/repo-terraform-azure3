@@ -179,7 +179,7 @@ yes
 | Role | Email | Password |
 |------|------|---------|
 | Staff | rattana@nu.ac.th | rattana_jaidee |
-| Customer | aonpimolw66@nu.ac.th | nu123456 |
+| Customer | Thirawaty66@nu.ac.th | nu000000 |
 | Warehouse Manager | sumet@nu.ac.th | sumet_jaidee |
 | Rector | somchai@nu.ac.th | hashed_pw004 |
 | Executive | winai@nu.ac.th | winai_jaidee |
