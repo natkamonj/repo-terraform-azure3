@@ -79,13 +79,16 @@ http://<public-ip>
 
 Customer:
 http://<ip>/customer/frontend/login.html
+
 Staff:
 http://<ip>/staff/frontend/login.html
+
 Warehouse:
 http://<ip>/warehouse/frontend/login.html
+
 Executive:
 http://<ip>/executive/frontend/login.html
-🧪 STEP 10: ทดสอบระบบ
+
 
 ## 10 ทดสอบการเข้าสู่ระบบ
 
@@ -93,8 +96,8 @@ http://<ip>/executive/frontend/login.html
 
 | บทบาทผู้ใช้       | Email                          | Password       |
 | ----------------| ------------------------------| -----  |
-| Staff | apichat@kku.ac.th | hashed_pw012 | 
 | Customer | Thirawaty66@nu.ac.th | nu000000 |
+| Staff | apichat@kku.ac.th | hashed_pw012 | 
 | Warehouse Manager | kamonchanok@ku.ac.th | hashed_pw024 |
 | Rector | krisana@tu.ac.th | hashed_pw020 |
 | Executive | winai@nu.ac.th | winai_jaidee |
