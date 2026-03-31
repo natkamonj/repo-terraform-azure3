@@ -17,7 +17,7 @@ vm_size  = "Standard_D2s_v3"
 admin_username      = "azureuser"
 ssh_public_key_path = "~/.ssh/id_rsa.pub"
 
-repo_url   = "https://github.com/Teerawatgg/web_sport_customer.git"
+repo_url   = "https://github.com/natkamonj/web_sport_customer.git"
 
 
 db_name     = "sports_rental_system"

@@ -191,15 +191,50 @@ write_files:
       # -----------------------------
       # FIX PATHS IN CUSTOMER
       # -----------------------------
-         if [ -d /var/www/html/customer ]; then
-        find /var/www/html/customer -type f \( -name "*.js" -o -name "*.ts" -o -name "*.html" -o -name "*.php" \) \
-      -exec sed -Ei \
-      -e 's|/?sports_rental_system/customer/api/|/customer/api/|g' \
-      -e 's|/?sports_rental_system/uploads/equipment/|/uploads/equipment/|g' \
-      -e 's|/?sports_rental_system/uploads/field/(B001|B002|B003|B004|B010)/|/uploads/field/\1/|g' \
-      -e 's|/?sports_rental_system/uploads/|/uploads/|g' {} + || true
-        fi
-    
+      if [ -d /var/www/html/customer ]; then
+        find /var/www/html/customer -type f \( -name "*.js" -o -name "*.ts" -o -name "*.html" -o -name "*.php" \) -exec sed -i \
+          -e 's|/sports_rental_system/customer/api/|/customer/api/|g' \
+          -e 's|sports_rental_system/customer/api/|/customer/api/|g' \
+          -e 's|/sports_rental_system/uploads/equipment/|/uploads/equipment/|g' \
+          -e 's|sports_rental_system/uploads/equipment/|/uploads/equipment/|g' \
+          -e 's|/sports_rental_system/uploads/field/B001/|/uploads/field/B001/|g' \
+          -e 's|/sports_rental_system/uploads/field/B002/|/uploads/field/B002/|g' \
+          -e 's|/sports_rental_system/uploads/field/B003/|/uploads/field/B003/|g' \
+          -e 's|/sports_rental_system/uploads/field/B004/|/uploads/field/B004/|g' \
+          -e 's|/sports_rental_system/uploads/field/B010/|/uploads/field/B010/|g' \
+          -e 's|sports_rental_system/uploads/field/B001/|/uploads/field/B001/|g' \
+          -e 's|sports_rental_system/uploads/field/B002/|/uploads/field/B002/|g' \
+          -e 's|sports_rental_system/uploads/field/B003/|/uploads/field/B003/|g' \
+          -e 's|sports_rental_system/uploads/field/B004/|/uploads/field/B004/|g' \
+          -e 's|sports_rental_system/uploads/field/B010/|/uploads/field/B010/|g' \
+          -e 's|/sports_rental_system/uploads/|/uploads/|g' \
+          -e 's|sports_rental_system/uploads/|/uploads/|g' {} + || true
+      fi
+
+      # -----------------------------
+      # FIX PATHS IN STAFF
+      # -----------------------------
+      if [ -d /var/www/html/staff ]; then
+        find /var/www/html/staff -type f \( -name "*.js" -o -name "*.ts" -o -name "*.html" -o -name "*.php" \) -exec sed -i \
+          -e 's|/sports_rental_system/staff/api/|/staff/api/|g' \
+          -e 's|sports_rental_system/staff/api/|/staff/api/|g' \
+          -e 's|/sports_rental_system/uploads/equipment/|/uploads/equipment/|g' \
+          -e 's|sports_rental_system/uploads/equipment/|/uploads/equipment/|g' \
+          -e 's|/sports_rental_system/uploads/field/B001/|/uploads/field/B001/|g' \
+          -e 's|/sports_rental_system/uploads/field/B002/|/uploads/field/B002/|g' \
+          -e 's|/sports_rental_system/uploads/field/B003/|/uploads/field/B003/|g' \
+          -e 's|/sports_rental_system/uploads/field/B004/|/uploads/field/B004/|g' \
+          -e 's|/sports_rental_system/uploads/field/B010/|/uploads/field/B010/|g' \
+          -e 's|sports_rental_system/uploads/field/B001/|/uploads/field/B001/|g' \
+          -e 's|sports_rental_system/uploads/field/B002/|/uploads/field/B002/|g' \
+          -e 's|sports_rental_system/uploads/field/B003/|/uploads/field/B003/|g' \
+          -e 's|sports_rental_system/uploads/field/B004/|/uploads/field/B004/|g' \
+          -e 's|sports_rental_system/uploads/field/B010/|/uploads/field/B010/|g' \
+          -e 's|/sports_rental_system/uploads/|/uploads/|g' \
+          -e 's|sports_rental_system/uploads/|/uploads/|g' {} + || true
+      fi
+
+
       # -----------------------------
       # CREATE API SYMLINKS
       # -----------------------------

@@ -1,194 +1,117 @@
- # Web Sport Rental System (Terraform + Azure)
+# Sport Rental Web Deployment with Terraform on Azure
 
-## เครื่องมือที่ต้องติดตั้ง
+## สิ่งที่ต้องเตรียมก่อนรัน
+1. ติดตั้ง Terraform
+2. ติดตั้ง Azure CLI
 
-- Terraform CLI
-- Azure CLI
-- สมัคร Account Azure
+3. สมัคร Account Azure
+    Login Azure ด้วยคำสั่ง
+   ```bash
+   az login
+   ```
+4. สร้าง SSH key หรือมี public key อยู่แล้ว
+5. เตรียม Git repository ของเว็บโปรเจกต์
+6. ตรวจสอบว่าใน repo มีไฟล์ SQL เช่น `sports_rental_system.sql`
+
 
 ---
-
-## 1. Login Azure
-
-เปิด Terminal แล้วรัน:
-
-```bash
+## 1: Login Azure
 az login
-```
 
----
+หลังจาก login แล้ว สามารถตรวจสอบ account ได้:
 
-## 2. สร้าง SSH Key (ถ้ายังไม่มี)
+az account show
 
-รันคำสั่ง:
+ถ้ามีหลาย subscription:
 
-```bash
+az account set --subscription "ชื่อหรือ ID"
+## 2: Clone Repository
+git clone https://github.com/USERNAME/repo-terraform-azure.git
+cd repo-terraform-azure
+
+## 3: สร้าง SSH Key
 ssh-keygen -t rsa -b 4096
-```
 
-ค่าเริ่มต้นที่ใช้ในโปรเจค:
+จากนั้น copy public key:
 
-- Private key: `~/.ssh/id_rsa`
-- Public key: `~/.ssh/id_rsa.pub`
-
----
-
-## 3. เตรียม Terraform Project
+cat ~/.ssh/id_rsa.pub
+## 4: ตั้งค่า terraform.tfvars
 
 สร้างไฟล์:
 
-```text
-main.tf
-variables.tf
-outputs.tf
-terraform.tfvars
-```
+cp terraform.tfvars.example terraform.tfvars
 
-จากนั้นนำโค้ดของโปรเจคใส่ลงในแต่ละไฟล์ให้เรียบร้อย
+แก้ไขไฟล์:
 
----
+resource_group_name = "rg-sport-rental"
+location            = "East Asia"
+vm_name             = "vm-sport-web"
+vm_size             = "Standard_B1s"
+admin_username      = "azureuser"
 
-## 4. แก้ไขค่าใน `terraform.tfvars`
+public_key = "ใส่ SSH PUBLIC KEY ตรงนี้"
 
-ตัวอย่างค่าที่ต้องกำหนด:
-
-```hcl
-location       = "Southeast Asia"
-vm_size        = "Standard_B1s"
-admin_username = "azureuser"
-ssh_public_key = "~/.ssh/id_rsa.pub"
-```
-
-สำคัญ: ต้องใช้ path ของ public key ให้ถูกต้อง คือ `~/.ssh/id_rsa.pub`
-
----
-
-## 5. โครงสร้างไฟล์ Terraform
-
-### `variables.tf`
-
-ใช้กำหนดค่าต่าง ๆ เช่น:
-
-- location
-- vm size
-- username
-- ssh key
-
-### `main.tf`
-
-กำหนดทรัพยากรหลัก เช่น:
-
-- Azure Provider
-- Resource Group
-- Virtual Network และ Subnet
-- Public IP
-- Network Security Group (เปิด port 22, 80)
-- Linux Virtual Machine
-
-และทำการตั้งค่าระบบภายใน VM เช่น:
-
-- ติดตั้ง Apache / PHP / MySQL
-- Clone โปรเจคจาก GitHub
-- Import Database
-- เชื่อมต่อหน้าเว็บกับฐานข้อมูล
-
-### `outputs.tf`
-
-ใช้แสดงค่า:
-
-- Public IP
-- URL สำหรับเข้าใช้งานระบบ
-
----
-
-## 6. Deploy ด้วย Terraform
-
-ไปที่โฟลเดอร์โปรเจค แล้วรัน:
-
-```bash
+app_port = 80
+## 5: Initialize Terraform
 terraform init
+## 6: ตรวจสอบ Plan
 terraform plan
+## 7: Deploy ระบบ
 terraform apply
-```
 
-เมื่อระบบถาม ให้พิมพ์:
+พิมพ์:
 
-```text
 yes
-```
-
----
-
-## 7. รอระบบติดตั้งให้เสร็จ
-
-หลังจาก `terraform apply` สำเร็จแล้ว
-
-ให้รอประมาณ **5 นาที** ก่อนเปิดหน้าเว็บ  
-เพื่อให้ VM ทำการติดตั้ง package, clone project และ import database ให้เรียบร้อย
-
----
-
-## 8. เข้าใช้งานระบบ
-
-รันคำสั่ง:
-
-```bash
+## 8: ตรวจสอบ Output
 terraform output
-```
-
-จะได้ค่า Public IP ของเครื่อง
-
-เปิดใน browser:
-
-```text
-http://<public-ip>/customer/frontend/login.html
-http://<public-ip>/staff/frontend/login.html
-http://<public-ip>/warehouse/frontend/login.html
-http://<public-ip>/executive/frontend/login.html
-```
 
 ตัวอย่าง:
 
-```text
-http://20.123.45.67/customer/frontend/login.html
-http://20.123.45.67/staff/frontend/login.html
-http://20.123.45.67/warehouse/frontend/login.html
-http://20.123.45.67/executive/frontend/login.html
-```
+public_ip = "20.xxx.xxx.xxx"
+customer_url = "http://20.xxx.xxx.xxx/customer/frontend/login.html"
+## 9: เข้าใช้งานระบบ
 
----
+เปิดผ่าน browser:
 
-## 9. ลบ Infrastructure
+http://<public-ip>
 
-เมื่อต้องการลบทรัพยากรทั้งหมด ให้รัน:
+หรือ:
+
+Customer:
+http://<ip>/customer/frontend/login.html
+Staff:
+http://<ip>/staff/frontend/login.html
+Warehouse:
+http://<ip>/warehouse/frontend/login.html
+Executive:
+http://<ip>/executive/frontend/login.html
+🧪 STEP 10: ทดสอบระบบ
+
+## 10 ทดสอบการเข้าสู่ระบบ
+
+หลังจากหน้าเว็บแสดงผลแล้ว สามารถใช้บัญชีตัวอย่างสำหรับทดสอบระบบได้ดังนี้
+
+| บทบาทผู้ใช้       | Email                          | Password       |
+| ----------------| ------------------------------| -----  |
+| Staff | apichat@kku.ac.th | hashed_pw012 | 
+| Customer | Thirawaty66@nu.ac.th | nu000000 |
+| Warehouse Manager | kamonchanok@ku.ac.th | hashed_pw024 |
+| Rector | krisana@tu.ac.th | hashed_pw020 |
+| Executive | winai@nu.ac.th | winai_jaidee |
+
+
+บัญชีเหล่านี้ใช้สำหรับทดสอบฟังก์ชันของระบบภายในขอบเขตของโครงการเท่านั้น
+
+## 11 ลบทรัพยากรเมื่อใช้งานเสร็จ
+
+เมื่อทดสอบเสร็จและไม่ต้องการใช้งานทรัพยากรบน Azure ต่อแล้ว สามารถลบทุกอย่างที่ Terraform สร้างไว้ได้ด้วยคำสั่ง
 
 ```bash
 terraform destroy
 ```
 
-จากนั้นพิมพ์:
+จากนั้นพิมพ์
 
-```text
+```bash
 yes
 ```
-
----
-
-## 10. Test Accounts
-
-| Role | Email | Password |
-|------|------|---------|
-| Staff | rattana@nu.ac.th | rattana_jaidee |
-| Customer | Thirawaty66@nu.ac.th | nu000000 |
-| Warehouse Manager | sumet@nu.ac.th | sumet_jaidee |
-| Rector | somchai@nu.ac.th | hashed_pw004 |
-| Executive | winai@nu.ac.th | winai_jaidee |
-
----
-
-## หมายเหตุเพิ่มเติม
-
-- ถ้าเข้าเว็บไม่ได้ทันที ให้รอเพิ่มอีก 2–3 นาที
-- ตรวจสอบว่า Azure VM อยู่ในสถานะ Running
-- ตรวจสอบว่าเปิด port 80 และ 22 แล้ว
-- ตรวจสอบว่า public IP ถูกต้องจากคำสั่ง `terraform output`
